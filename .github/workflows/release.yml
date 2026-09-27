@@ -13,6 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # frank fork: Windows only. The macOS/Linux code is upstream's and untested here.
         include:
           # Windows x64
           - os: windows-latest
@@ -26,24 +27,6 @@ jobs:
             artifact_name: always-bind-window.exe
             asset_name: AlwaysBindWindow-windows-arm64.exe
 
-          # macOS x64 (Intel) — cross-compile on arm64 runner
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            artifact_name: always-bind-window
-            asset_name: AlwaysBindWindow-macos-x64
-
-          # macOS ARM64 (Apple Silicon)
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            artifact_name: always-bind-window
-            asset_name: AlwaysBindWindow-macos-arm64
-
-          # Linux x64
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            artifact_name: always-bind-window
-            asset_name: AlwaysBindWindow-linux-x64
-
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -54,23 +37,10 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libayatana-appindicator3-dev libxdo-dev
-
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
 
-      - name: Prepare artifact (Unix)
-        if: runner.os != 'Windows'
-        run: |
-          cp target/${{ matrix.target }}/release/${{ matrix.artifact_name }} ${{ matrix.asset_name }}
-          chmod +x ${{ matrix.asset_name }}
-
       - name: Prepare artifact (Windows)
-        if: runner.os == 'Windows'
         run: |
           copy target\${{ matrix.target }}\release\${{ matrix.artifact_name }} ${{ matrix.asset_name }}
 
@@ -100,19 +70,25 @@ jobs:
           files: artifacts/**/*
           generate_release_notes: true
           body: |
+            Windows build of the **frank fork** of [XR-stb/AlwaysBindWindow](https://github.com/XR-stb/AlwaysBindWindow). It's the upstream tool plus fixes for grouping *some* windows of a multi-window app:
+
+            - Only the windows you lasso are bound. Other windows of the same app stay independent.
+            - Grouped windows move together only when you drag a window itself. Dragging inside a window (e.g. panning a chart) or resizing it no longer moves the group.
+
+            See [`docs/DECISIONS.md`](https://github.com/frankforges/AlwaysBindWindow/blob/main/docs/DECISIONS.md) for details.
+
             ## Downloads
 
-            | Platform | Architecture | File |
-            |----------|-------------|------|
-            | Windows | x64 | `AlwaysBindWindow-windows-x64.exe` |
-            | Windows | ARM64 | `AlwaysBindWindow-windows-arm64.exe` |
-            | macOS | Intel (x64) | `AlwaysBindWindow-macos-x64` |
-            | macOS | Apple Silicon (ARM64) | `AlwaysBindWindow-macos-arm64` |
-            | Linux | x64 | `AlwaysBindWindow-linux-x64` |
+            | Architecture | File |
+            |--------------|------|
+            | x64 (most PCs) | `AlwaysBindWindow-windows-x64.exe` |
+            | ARM64 | `AlwaysBindWindow-windows-arm64.exe` |
+
+            Always-latest link: `https://github.com/frankforges/AlwaysBindWindow/releases/latest/download/AlwaysBindWindow-windows-x64.exe`
 
             ### Quick Start
-            1. Download the file for your platform
-            2. Run it (on macOS/Linux: `chmod +x` first)
-            3. Press `Ctrl+Alt+G` to lasso-bind windows
+            1. Download the `.exe` and run it. It starts as a tray icon.
+            2. The exe is not code-signed, so Windows SmartScreen may warn on first run: click **More info → Run anyway**.
+            3. Press `Ctrl+Alt+G` and drag a rectangle over the windows to bind. Tight rectangles avoid picking up extra windows.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

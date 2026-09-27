@@ -51,7 +51,7 @@ Group membership is `GroupManager.active_bindings: HashMap<hwnd, group_id>`, whi
 - **Debug vs release:** a debug build has a console and logs (`env_logger`, default level `info`). A release build uses the GUI subsystem: no console, and logs are lost.
 - **`Cargo.lock` is gitignored upstream,** so dependency versions can drift between builds.
 - **The build shows ~14 warnings** (dead code, unused `BOOL` results). They are expected. Don't fix them as a side task.
-- **Pushing a `v*` tag triggers `.github/workflows/release.yml`** if workflows are enabled on the fork. It builds all platforms and publishes a public GitHub Release.
+- **Pushing any `v*` tag publishes a public GitHub Release** (Windows x64 + ARM64, via `.github/workflows/release.yml`). Only tag tested commits on `main`. See `docs/BUILD.md` → Releases.
 
 ## Git workflow
 

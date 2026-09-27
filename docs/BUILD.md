@@ -65,4 +65,17 @@ The copy in daily use lives at `C:\Program Files\AlwaysBindWindow\always-bind-wi
 
 ## Releases
 
-Our versions are git tags `vX.Y.Z-frank` on `main` (see `AGENTS.md` → Git workflow). Pushing a `v*` tag triggers `.github/workflows/release.yml` only if workflows are enabled on the fork. When it runs, it builds Windows/macOS/Linux binaries and publishes a public GitHub Release. Otherwise, build locally with `cargo build --release`.
+Pushing a `vX.Y.Z-frank` tag on `main` publishes a public GitHub Release automatically. `.github/workflows/release.yml` builds Windows x64 and ARM64 on GitHub's runners and attaches both `.exe` files.
+
+To cut a release:
+
+1. Make sure `main` is committed, pushed, and tested (the manual tests above).
+2. `git tag -a vX.Y.Z-frank -m "<one-line summary>"`
+3. `git push origin vX.Y.Z-frank`
+4. Watch the build: `gh run watch -R frankforges/AlwaysBindWindow`
+
+**Versioning:** bump the last number (Z) for bug fixes and the middle one (Y) for new features. `Cargo.toml`'s version stays at upstream's value.
+
+**Always-latest download link:** `https://github.com/frankforges/AlwaysBindWindow/releases/latest/download/AlwaysBindWindow-windows-x64.exe`
+
+**Fork divergence:** our `release.yml` is trimmed to Windows only and has its own release text. When merging `upstream/main`, keep our version of this file if it conflicts.

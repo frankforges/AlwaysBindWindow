@@ -7,6 +7,7 @@
   - D2: move sync follows the window, not the cursor. Tagged `v0.1.1-frank` (the current version).
 - Both were tested manually by the user with NinjaTrader windows (see the two manual tests in `docs/BUILD.md`), and both passed.
 - The installed copy at `C:\Program Files\AlwaysBindWindow\always-bind-window.exe` is built from `main` with both fixes. Auto Start points there. To update it, follow `docs/BUILD.md` → Installed copy.
+- Releases are published automatically from `v*-frank` tags (Windows x64 + ARM64). The first published release is `v0.1.1-frank`.
 - Upstream PRs are open and waiting for the maintainer: XR-stb/AlwaysBindWindow#4 (D1) and #5 (D2).
 
 ## Next steps
