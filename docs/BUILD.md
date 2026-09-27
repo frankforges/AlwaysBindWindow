@@ -45,6 +45,15 @@ This is the regression test for DECISIONS D1. Run it after any change to binding
 6. Drag W1. Expect: W2 follows, and W3 stays put.
 7. Click W3, then W1 again. Expect: still `FG sync: 2 windows`. If the count grows, the bug is back.
 
+## Installed copy
+
+The copy in daily use lives at `C:\Program Files\AlwaysBindWindow\always-bind-window.exe`, and Auto Start points at that path. To update it, from an elevated shell:
+
+1. `cargo build --release`
+2. Quit the running copy (tray → Quit, or `Stop-Process -Name always-bind-window`). Its groups are lost.
+3. Copy `target\release\always-bind-window.exe` over the installed file.
+4. Relaunch it unelevated, the way Auto Start does: `Start-Process explorer.exe "C:\Program Files\AlwaysBindWindow\always-bind-window.exe"`
+
 ## Releases
 
 Our versions are git tags `vX.Y.Z-frank` on `main` (see `AGENTS.md` → Git workflow). Pushing a `v*` tag triggers `.github/workflows/release.yml` only if workflows are enabled on the fork. When it runs, it builds Windows/macOS/Linux binaries and publishes a public GitHub Release. Otherwise, build locally with `cargo build --release`.
