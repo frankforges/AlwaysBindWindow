@@ -8,7 +8,11 @@ A fork of [XR-stb/AlwaysBindWindow](https://github.com/XR-stb/AlwaysBindWindow):
 
 **Why the fork exists:** the maintainer uses it to group a *subset* of the windows of one multi-window app (a NinjaTrader 8 workspace). The other windows of that app must stay independent. Upstream bound windows by process name, which pulled every window of the app into the group (upstream issue #3). This fork binds only the exact windows selected.
 
-**Current version:** `v0.1.0-frank` = upstream `f595e21` + the binding fix `6278a56` + these docs. The fix is also offered upstream as XR-stb/AlwaysBindWindow#4.
+**Fixes carried on `main`:**
+- Bind only lassoed windows: `6278a56`, D1, upstream PR XR-stb/AlwaysBindWindow#4
+- Move sync follows the window, not the cursor: `ff511c6`, D2, upstream PR #5
+
+Each fix lives on its own branch cut from `upstream/main`, and that branch is merged into `main`.
 
 ## Scope
 
@@ -31,7 +35,7 @@ The app runs three threads that share one `Arc<Mutex<GroupManager>>`:
 
 - **Main / tray** — `tray::run_tray`: winit event loop, tray menu, global hotkeys. Lasso → `overlay::run_picker_overlay` → `GroupManager::create_group_from_hwnds`.
 - **Monitor** — `platform::windows::start_monitor`: `SetWinEventHook` for foreground (`0x0003`), minimize start/end (`0x0016`/`0x0017`), and object destroy (`0x8001`). All handled in `win_event_callback`.
-- **Move sync** — `move_sync_loop`: polls every 8 ms. While the left button is held on a grouped foreground window, it moves the siblings by the cursor delta.
+- **Move sync** — `move_sync_loop`: polls every 8 ms. While the left button is held on a grouped foreground window, it moves the siblings by however far that window itself moved without changing size. It never uses the cursor delta (see DECISIONS D2).
 
 Group membership is `GroupManager.active_bindings: HashMap<hwnd, group_id>`, which is the only source of truth. `WindowGroup.window_matchers` is still filled in at lasso time but is **not used on Windows** (see DECISIONS D1).
 

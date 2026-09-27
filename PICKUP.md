@@ -2,12 +2,14 @@
 
 ## Current state (2026-09-27)
 
-- **v0.1.0-frank** is tagged on `main` of `frankforges/AlwaysBindWindow` and in daily use. It fixes same-app windows being locked together (DECISIONS D1).
-- The user tested it manually with NinjaTrader windows: the group stayed at exactly the lassoed windows over ~7 minutes of switching.
-- Upstream PR XR-stb/AlwaysBindWindow#4 (branch `fix/independent-same-app-windows`) is open and waiting for the maintainer.
-- The user runs the release build of v0.1.0-frank installed at `C:\Program Files\AlwaysBindWindow\always-bind-window.exe`, with Auto Start enabled from that copy. To update it, follow `docs/BUILD.md` → Installed copy.
+- `main` carries two fixes on top of upstream:
+  - D1: only lassoed windows bind. Tagged `v0.1.0-frank`.
+  - D2: move sync follows the window, not the cursor. Not tagged yet.
+- Both were tested manually by the user with NinjaTrader windows (see the two manual tests in `docs/BUILD.md`), and both passed.
+- The installed copy at `C:\Program Files\AlwaysBindWindow\always-bind-window.exe` is built from `main` with both fixes. Auto Start points there. To update it, follow `docs/BUILD.md` → Installed copy.
+- Upstream PRs are open and waiting for the maintainer: XR-stb/AlwaysBindWindow#4 (D1) and #5 (D2).
 
 ## Next steps
 
-- Watch PR #4 for review comments. If it's merged, `git merge upstream/main` into `main`. It should apply cleanly, since the same commit is already on `main`.
+- Watch PRs #4 and #5 for review comments. If they are merged, `git merge upstream/main` into `main`.
 - Candidates, when there's a need: ROADMAP R1 (opt-in rejoin), K1 (lasso over-selection).

@@ -45,6 +45,15 @@ This is the regression test for DECISIONS D1. Run it after any change to binding
 6. Drag W1. Expect: W2 follows, and W3 stays put.
 7. Click W3, then W1 again. Expect: still `FG sync: 2 windows`. If the count grows, the bug is back.
 
+## Manual test: move sync only on real moves
+
+This is the regression test for DECISIONS D2. Move sync writes nothing to the log, so judge it by eye.
+
+1. Group two windows, W1 and W2. At least one should have draggable content, such as a chart.
+2. Drag inside W1 (pan the chart). Expect: W2 doesn't move.
+3. Drag W1 by its title bar. Expect: W2 follows and keeps its relative position.
+4. Resize W1 from its left or top edge. Expect: only W1 changes; W2 doesn't move.
+
 ## Installed copy
 
 The copy in daily use lives at `C:\Program Files\AlwaysBindWindow\always-bind-window.exe`, and Auto Start points at that path. To update it, from an elevated shell:
