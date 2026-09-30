@@ -1,6 +1,6 @@
 # Roadmap
 
-Candidates, not commitments. v0.1.0-frank already covers the main use case. Pick items up only when there's a real need.
+Candidates, not commitments. The current release (v0.1.1-frank) already covers the main use case. Pick items up only when there's a real need.
 
 ## Ideas
 
@@ -19,3 +19,4 @@ Bring back the behavior removed in DECISIONS D1, but so that it can't cause the 
 - **K2 — `sync_move` / `sync_minimize` in `settings.json` are not wired up.** Every group always syncs both.
 - **K3 — groups are not saved.** They are lost when the tool quits. Saving them runs into the same "which window is which" question as R1, because window handles don't survive restarts.
 - **K4 — `Cargo.lock` is gitignored,** so builds aren't reproducible.
+- **K5 — `release.yml` uses actions that still target Node.js 20** (`checkout@v4`, `upload-artifact@v4`, `download-artifact@v4`, `action-gh-release@v2`). GitHub currently forces them onto Node 24 with a deprecation warning. Bump them to their Node 24 versions before GitHub stops doing that.
